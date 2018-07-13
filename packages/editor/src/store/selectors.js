@@ -477,8 +477,9 @@ export function isEditedPostEmpty( state ) {
  * @return {boolean} Whether the post can be autosaved.
  */
 export function isEditedPostAutosaveable( state ) {
-	// A post must contain a title, an excerpt, or non-empty content to be valid for autosaving.
-	if ( ! isEditedPostSaveable( state ) ) {
+	// A post needs to be in dirty state and,
+	// a post must contain a title, an excerpt, or non-empty content to be valid for autosaving.
+	if ( ! isEditedPostDirty( state ) || ! isEditedPostSaveable( state ) ) {
 		return false;
 	}
 
