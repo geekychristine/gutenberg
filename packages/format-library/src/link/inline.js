@@ -78,6 +78,21 @@ const LinkEditor = ( { value, onChangeInputValue, onKeyDown, submitLink, autocom
 	/* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
 );
 
+const LinkViewerUrl = ( { url } ) => {
+	if ( ! url ) {
+		return <span className="editor-format-toolbar__link-container-value"></span>;
+	}
+
+	return (
+		<ExternalLink
+			className="editor-format-toolbar__link-container-value"
+			href={ url }
+		>
+			{ filterURLForDisplay( safeDecodeURI( url ) ) }
+		</ExternalLink>
+	);
+};
+
 const LinkViewer = ( { url, editLink } ) => (
 	// Disable reason: KeyPress must be suppressed so the block doesn't hide the toolbar
 	/* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -85,12 +100,7 @@ const LinkViewer = ( { url, editLink } ) => (
 		className="editor-format-toolbar__link-container-content"
 		onKeyPress={ stopKeyPropagation }
 	>
-		<ExternalLink
-			className="editor-format-toolbar__link-container-value"
-			href={ url }
-		>
-			{ filterURLForDisplay( safeDecodeURI( url ) ) }
-		</ExternalLink>
+		<LinkViewerUrl url={ url } />
 		<IconButton icon="edit" label={ __( 'Edit' ) } onClick={ editLink } />
 	</div>
 	/* eslint-enable jsx-a11y/no-static-element-interactions */
@@ -109,7 +119,10 @@ class InlineLinkUI extends Component {
 		this.resetState = this.resetState.bind( this );
 		this.autocompleteRef = createRef();
 
-		this.state = {};
+		this.state = {
+			opensInNewWindow: false,
+			inputValue: '',
+		};
 	}
 
 	static getDerivedStateFromProps( props, state ) {
